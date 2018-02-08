@@ -5,20 +5,48 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-var cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
-
-camera.position.z = 5;
+camera.position.z = 1;
 
 var animate = function () {
-  requestAnimationFrame( animate );
-
-  cube.rotation.x += 0.1;
-  cube.rotation.y += 0.1;
-
+  requestAnimationFrame(animate);
   renderer.render(scene, camera);
 };
 
 animate();
+
+var controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.25;
+controls.enableZoom = true;
+
+controls.update();
+
+// LIGHTS
+hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
+hemiLight.color.setHSL( 0.6, 1, 0.6 );
+hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+hemiLight.position.set( 0, 50, 0 );
+scene.add( hemiLight );
+
+dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+dirLight.color.setHSL( 0.1, 1, 0.8 );
+dirLight.position.set( -1, 1.75, 1 );
+dirLight.position.multiplyScalar( 30 );
+scene.add( dirLight );
+
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath('models/');
+mtlLoader.load('potions.mtl', function (materials) {
+
+  materials.preload();
+
+  var objLoader = new THREE.OBJLoader();
+  objLoader.setMaterials(materials);
+  objLoader.setPath('models/');
+  objLoader.load('potions.obj', function (object) {
+
+    scene.add(object);
+    object.position.y = 0;
+
+  })
+})
