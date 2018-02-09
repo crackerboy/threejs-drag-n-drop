@@ -50,3 +50,28 @@ mtlLoader.load('potions.mtl', function (materials) {
 
   })
 })
+
+var objects = [];
+
+// Add 100 random objects (spheres)
+var object, material, radius;
+var objGeometry = new THREE.SphereGeometry(1, 24, 24);
+for (var i = 0; i < 50; i++) {
+  material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+  material.transparent = true;
+  object = new THREE.Mesh(objGeometry.clone(), material);
+  objects.push(object);
+
+  radius = Math.random() * 4 + 2;
+  object.scale.x = radius;
+  object.scale.y = radius;
+  object.scale.z = radius;
+
+  object.position.x = Math.random() * 50 - 25;
+  object.position.y = Math.random() * 50 - 25;
+  object.position.z = Math.random() * 50 - 25;
+
+  scene.add(object);
+}
+
+var dragControls = new THREE.DragControls( objects, camera, renderer.domElement, controls );
