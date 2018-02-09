@@ -56,8 +56,12 @@ mtlLoader.load('potions.mtl', function (materials) {
   objLoader.load('potions.obj', function (object) {
 
     scene.add(object);
-    objects.push(object);
-    object.position.y = 0;
+    objects.push(object.children[0]);
+    objects.push(object.children[1]);
+    objects.push(object.children[2]);
+    objects.push(object.children[3]);
+    console.log(objects);
+    object.position.y = 1;
 
   })
 })
@@ -71,7 +75,7 @@ for (var i = 0; i < 10; i++) {
   object = new THREE.Mesh(objGeometry.clone(), material);
   objects.push(object);
 
-  radius = Math.random() * 1 + 0.5;
+  radius = Math.random() * 0.5 + 0.3;
   object.scale.x = radius;
   object.scale.y = radius;
   object.scale.z = radius;
